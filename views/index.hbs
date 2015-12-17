@@ -1,0 +1,153 @@
+<h1>Test BCS</h1>
+<div class="row">
+	<div class="col4"></div>
+	<form class="form-inline col4" id="filterForm">
+		<div class="form-group">
+			<label for="InputIndice">Índice</label>
+			<select name="indice" id="indice">
+				<option value="ALL" selected="true">Todos los Índices</option>
+				<option value="IPSA">IPSA</option>
+				<option value="IGPA">IGPA</option>
+				<option value="INTER-10">INTER-10</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="InputIndice">Periodo</label>
+			<select name="periodo" id="periodo">
+				<option value="DI" selected="true">Diario</option>
+				<option value="ME">Mensual</option>
+				<option value="AN">Anual</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="InputName2">Desde fecha</label>
+			<input readonly="true" type="date" class="form-control" name="fechaDesde" id="fechaDesde" placeholder="2015-10-20">
+		</div>
+		<div class="form-group">
+			<label for="InputEmail2">Hasta Fecha</label>
+			<input readonly="true" type="date" class="form-control" name="fechaHasta" id="fechaHasta" placeholder="2015-12-10">
+		</div>
+		<button id="btnFiltrar" type="button" class="btn btn-default">Filtrar</button>
+	</form>
+</div>
+<div class="row">
+	<div class="col-md-8">
+		<table id="table" class="table table-striped">
+			<thead>
+				<tr id="tableHeader">
+					<th>Fecha</th>
+					<th>Índice</th>
+					<th>Valor Actual del índice</th>
+					<th>Variación del Indice</th>
+				</tr>
+			</thead>
+			<tbody>
+				
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-8">
+		<div id="spinner" class="hide"></div>
+	</div>
+</div>
+<script>
+	var opts = {
+	  lines: 9 // The number of lines to draw
+	, length: 7 // The length of each line
+	, width: 9 // The line thickness
+	, radius: 9 // The radius of the inner circle
+	, scale: 1 // Scales overall size of the spinner
+	, corners: 1 // Corner roundness (0..1)
+	, color: '#000' // #rgb or #rrggbb or array of colors
+	, opacity: 0.25 // Opacity of the lines
+	, rotate: 0 // The rotation offset
+	, direction: 1 // 1: clockwise, -1: counterclockwise
+	, speed: 1 // Rounds per second
+	, trail: 60 // Afterglow percentage
+	, fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+	, zIndex: 2e9 // The z-index (defaults to 2000000000)
+	, className: 'spinner' // The CSS class to assign to the spinner
+	, top: '50%' // Top position relative to parent
+	, left: '50%' // Left position relative to parent
+	, shadow: false // Whether to render a shadow
+	, hwaccel: false // Whether to use hardware acceleration
+	, position: 'absolute' // Element positioning
+	}
+	var target = document.getElementById('spinner');
+
+	var table = document.getElementById("table");
+	var indices=[];
+	var now = moment();
+
+	(function(){
+		
+		now = now.subtract(1, 'days');
+		var tomorrow = moment().add(1, 'days');
+
+		console.log(now.format("YYYY-MM-DD"));
+
+		document.getElementById("fechaDesde").value = now.format("YYYY-MM-DD");
+		document.getElementById("fechaHasta").value = tomorrow.format("YYYY-MM-DD");
+		var btnFiltro = document.getElementById("btnFiltrar");
+
+		btnFiltro.addEventListener("click", dataFilter);
+
+		$('input[type=date]').datepicker({
+		  	dateFormat: 'yy-mm-dd',
+		    changeMonth: true,
+		    changeYear: true
+		});
+		var spinner = new Spinner(opts).spin(target);
+	})();
+
+	function dataFilter(){
+		var indice = document.getElementById("indice").value;
+		var periodo = document.getElementById("periodo").value;
+		var fechaDesde = document.getElementById("fechaDesde").value;
+		var fechaHasta = document.getElementById("fechaHasta").value;
+
+		if(moment(fechaDesde).isBefore(fechaHasta) || moment(fechaDesde).isSame(fechaHasta)){
+			$("#table tbody").empty();
+
+			var endpoint = "/api" + (indice!="ALL"? "/"+indice :"")+ "/" + periodo +"/"+fechaDesde+"/"+fechaHasta;
+			console.log(endpoint);
+			target.className="";
+			$.ajax({
+			  url: endpoint,
+			  context: document.body
+			}).done(function(data) {
+				parseData(data);
+			});
+		}
+	}
+
+	function parseData(data){
+
+		if(data.resultados.code==0){
+			if(data.resultados.indicesItem.length>0){
+				indices = data.resultados.indicesItem.sort(sortByDate);
+
+				for(var i in indices){
+					$("#table tbody").append("<tr class='res'> <td>"+indices[i].fecha+"</td><td>"+indices[i].indice+"</td><td>"+indices[i].ind_act+"</td><td>"+indices[i].ind_var+"</td> </tr>");
+				}
+			}else{
+				$("#table tbody").append("<tr class='res'> <td colspan='4'><div class='alert alert-info'>No existen datos, intente refinar la busqueda.</div> </td></tr>");
+			}
+
+		}else{
+			$("#table tbody").append("<tr class='res'> <td colspan='4'><div class='alert alert-warning'>Ocurrio un error en la búsqueda, intentelo nuevamente en un momento.</div> </td></tr>");
+		}
+		target.className="hide";
+		
+	}
+
+	function sortByDate(a,b){
+		var aDate = a.fecha;
+  		var bDate = b.fecha;
+  		return (( moment(aDate).isBefore(bDate)) ? -1 : ((moment(aDate).isAfter(bDate)) ? 1 : 0));
+	}
+
+	
+</script>
