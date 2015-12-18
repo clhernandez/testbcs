@@ -2,14 +2,18 @@ var express = require('express');
 var request = require('request');
 var router = express.Router();
 
-var endpoint = "http://bcs-test.cloudapp.net/bcstest/rest/indices/consultaIndices";
+var ENDPOINT = "http://bcs-test.cloudapp.net:8080/bcstest/rest/indices/consultaIndices";
 var timeoutGlobal = 100000;
 
 /* GET home page. */
 var cache=null;
 
 router.get('/', function(req, res, next) {
-	res.render('index', { title: 'Express'});
+	res.render('index');
+});
+
+router.get('/graficos', function(req, res, next) {
+	res.render('graficos');
 });
 
 router.get("/api/:indice/:periodo/:fechaDesde/:fechaHasta", function(req, res, next){
@@ -18,8 +22,9 @@ router.get("/api/:indice/:periodo/:fechaDesde/:fechaHasta", function(req, res, n
 	var periodo = req.params.periodo;
 	var fechaDesde = req.params.fechaDesde;
 	var fechaHasta = req.params.fechaHasta;
+	console.log("Filter By: "+req.params.indice+", "+req.params.periodo+", "+req.params.fechaDesde+", "+req.params.fechaHasta);
 
-	request.get({url: endpoint, qs:{indice:indice, periodo:periodo, f_desde:fechaDesde, f_hasta:fechaHasta},timeout:timeoutGlobal}, function(err,response,body){
+	request.get({url: ENDPOINT, qs:{indice:indice, periodo:periodo, f_desde:fechaDesde, f_hasta:fechaHasta},timeout:timeoutGlobal}, function(err,response,body){
 		
 
 		if (!err && response.statusCode == 200) {
@@ -36,13 +41,13 @@ router.get("/api/:indice/:periodo/:fechaDesde/:fechaHasta", function(req, res, n
 });
 
 router.get("/api/:periodo/:fechaDesde/:fechaHasta", function(req, res, next){
-	console.log("Filter by periodo");
+	console.log("Filter By: "+req.params.periodo+", "+req.params.fechaDesde+", "+req.params.fechaHasta);
 	var data = {};
 	var periodo = req.params.periodo;
 	var fechaDesde = req.params.fechaDesde;
 	var fechaHasta = req.params.fechaHasta;
 
-	request.get({url: endpoint, qs:{periodo:periodo, f_desde:fechaDesde, f_hasta:fechaHasta},timeout:timeoutGlobal}, function(err,response,body){
+	request.get({url: ENDPOINT, qs:{periodo:periodo, f_desde:fechaDesde, f_hasta:fechaHasta},timeout:timeoutGlobal}, function(err,response,body){
 
 		if (!err && response.statusCode == 200) {
 			data.resultados = JSON.parse(body);

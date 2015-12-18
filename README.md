@@ -6,7 +6,7 @@ Para ejecutar este programa, es necesario instalar nodejs, esto se puede realiza
 	$ sudo apt-get install npm
 	$ sudo npm install -g express
 
-Luego, debe descargar esta aplicación, y ejecutarla. Desde linux puede realizar los siguientes comandos.
+Luego, debe descargar esta aplicación, y ejecutarla. Desde la terminal puede realizar los siguientes comandos.
 
 	$ cd ~ 
 	$ wget https://github.com//clhernandez/testbcs/archive/master.zip
@@ -17,8 +17,8 @@ Ahora es necesario instalar las dependencias de la aplicacion, para esto ejecuta
 
 	$ npm install
 
-Finalmente, para ejecutar la aplicacion, se debe ejecutar el siguiente comando.
+Finalmente, para iniciar la aplicacion, se debe ejecutar el siguiente comando.
 
 	$ npm start
 
-Listo, ahora puede ingresar a su navegador favorito, e ingresar a la url http://localhost:3000
+Listo, ahora puede abrir a su navegador favorito, e ingresar a la url http://localhost:3000

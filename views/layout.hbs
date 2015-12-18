@@ -1,19 +1,38 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{{title}}</title>
+    <title>BCS</title>
     <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+    <link rel="stylesheet" href="/stylesheets/jquery-ui.min.css">
+    <link rel="stylesheet" href="/stylesheets/morris.css">
     <link rel='stylesheet' href='/stylesheets/core.css' />
-    <script src="/javascripts/moment.min.js"></script>
-    <script src="/javascripts/spin.min.js"></script>
 
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="/javascripts/jquery-1.11.3.min.js"></script>
+    <script src="/javascripts/moment-with-locales.min.js"></script>
+    <script src="/javascripts/spin.min.js"></script>
+    <script src="/javascripts/jquery-ui.min.js"></script>
+    <script src="/javascripts/raphael-min.js"></script>
+    <script src="/javascripts/morris.min.js"></script>
+    <script src="/javascripts/core.js"></script>
   </head>
   <body>
-  	<div class="container-fluid">
-    	{{{body}}}
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">BCS</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li id="indices" class="active"><a href="/">Búsqueda</a></li>
+            <li id="graficos"><a href="/graficos">Gráficos</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+    <div class="container-fluid">
+      {{{body}}}
     </div>
   </body>
 </html>

@@ -1,0 +1,41 @@
+<h1>Gráficos BCS</h1>
+<div class="row">
+	<div class="col-md-10">
+		<form class="form-inline col4" id="filterForm">
+			<div class="form-group">
+				<label for="InputIndice">Índice</label>
+				<select name="indice" id="indice">
+					<option value="IPSA" selected="true">IPSA</option>
+					<option value="IGPA">IGPA</option>
+					<option value="INTER-10">INTER-10</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="InputIndice">Periodo</label>
+				<select name="periodo" id="periodo">
+					<option value="ME">Mensual</option>
+					<option value="AN">Anual</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="InputName2">Fecha</label>
+				<input readonly="true" type="date" class="form-control" name="fecha" id="fecha">
+			</div>
+			<button id="btnGraficar" type="button" class="btn btn-default">Filtrar</button>
+		</form>
+	</div>
+</div>
+<div class="container-fluid">
+	<div id="grafico" class="row">
+		<h2 id="titleGraph"></h2>
+		<div class="col-md-8">
+			<div id="graficoNuevo" style="height: 250px;"></div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-8">
+		<div id="spinner" class="hide"></div>
+	</div>
+</div>
+<script src="/javascripts/graphics.js"></script>
